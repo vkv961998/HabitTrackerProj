@@ -126,9 +126,10 @@ router.get("/habitStatus", (req, resp) => {
     });
 });
 router.get("/:id", async (req, resp) => {
-  const documentProduct = await Habit.findOneAndDelete({ _id: req.params.id });
+  console.log("Error");
+  const documentProduct = await Habit.findOneAndDelete({ id: req.params.id });
   if (!documentProduct) {
-    resp.status(500).json(err);
+    // resp.status(500).json(err);
   }
   resp.redirect("/");
 });
