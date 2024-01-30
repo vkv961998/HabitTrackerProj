@@ -13,7 +13,6 @@ app.set("views", path.join(__dirname, "views"));
 const { connectMongoose } = require("./app/db");
 connectMongoose();
 
-// Connecting Assets Folder / Static Files
 app.use("/assets", express.static("./assets"));
 app.use(bodyParser.urlencoded({ extended: true }));
 

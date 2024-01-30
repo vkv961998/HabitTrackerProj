@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 const Habit = require("../models/habitModel.js");
 router.get("/", (req, resp) => {
   Habit.find()
@@ -125,12 +126,45 @@ router.get("/habitStatus", (req, resp) => {
       resp.status(500).send("Error updating habit status");
     });
 });
+// router.get("/:id", async (req, resp) => {
+//   const documentProduct = await Habit.findByIdAndDelete(req.params.id);
+//   if (!documentProduct) {
+//     // resp.status(500).json(err);
+//   }
+//   resp.redirect("/");
+// });
+// router.get("/:id", async (req, resp) => {
+//   try {
+//     const documentProduct = await Habit.findByIdAndDelete(req.params.id);
+//     if (!documentProduct) {
+//       return resp.status(404).send("Habit not found");
+//     }
+//     resp.redirect("/");
+//   } catch (error) {
+//     console.error("Error deleting habit:", error);
+//     resp.status(500).send("Error deleting habit");
+//   }
+// });
 router.get("/:id", async (req, resp) => {
-  console.log("Error");
-  const documentProduct = await Habit.findOneAndDelete({ id: req.params.id });
-  if (!documentProduct) {
-    // resp.status(500).json(err);
+  const habitId = req.params.id;
+
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(habitId)) {
+    return resp.status(400).send("Invalid habit ID");
   }
-  resp.redirect("/");
+
+  try {
+    const documentProduct = await Habit.findByIdAndDelete(habitId);
+
+    if (!documentProduct) {
+      return resp.status(404).send("Habit not found");
+    }
+
+    resp.redirect("/");
+  } catch (error) {
+    console.error("Error deleting habit:", error);
+    resp.status(500).send("Error deleting habit");
+  }
 });
+
 module.exports = router;

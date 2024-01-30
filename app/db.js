@@ -1,11 +1,13 @@
 console.log("DB");
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/HabitTracker");
+// mongoose.connect("mongodb://127.0.0.1:27017/HabitTracker");
 
 exports.connectMongoose = () => {
-  const db = mongoose.connection;
-  db.on("error", console.error.bind(console, "connectionError"));
-  db.once("open", () => {
-    console.log("Server is connected to database");
-  });
+  mongoose.set("strictQuery", false);
+  mongoose
+    .connect(
+      "mongodb+srv://keertivardhanvadrevu:vkv961998@cluster0.za2vcna.mongodb.net/?retryWrites=true&w=majority"
+    )
+    .then((e) => console.log("Connected to Mongodb => Habit-Tracker"))
+    .catch((e) => console.log("Mongodb is not been connected", e));
 };
